@@ -1,0 +1,39 @@
+spring:
+  redis:
+    host: 192.168.66.252
+    password:
+    port: 6379
+
+  datasource:
+    username:
+    password:
+    url:
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  dubbo:
+    registry:
+      protocol: zookeeper
+      address: 192.168.66.252
+      port: 2181
+      client: zkclient
+
+domain:
+  avatarUrlHost:
+  imageUrlHost:
+  videoUrlHost:
+  wxacodeUrlHost:
+
+wxacode:
+  save-path: /usr/local/nginx/html/wxacode
+
+custom:
+  default-max-be-hottime-offset: 60800
+
+pay:
+  wxpay:
+    keyStoreFilePath: /app/chz/apiclient_cert.p12
+    serverIp: 192.168.0.1

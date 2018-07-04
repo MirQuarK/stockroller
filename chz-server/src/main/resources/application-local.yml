@@ -1,0 +1,37 @@
+spring:
+  redis:
+    host: 127.0.0.1
+    password:
+    port: 6379
+
+  datasource:
+    username: root
+    password:
+    url: jdbc:mysql://localhost:3308/guxueqiu?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=true
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+  dubbo:
+    registry:
+      protocol: zookeeper
+      address: 192.168.66.252
+      port: 2181
+      client: zkclient
+
+
+domain:
+  avatarUrlHost:
+  imageUrlHost:
+  videoUrlHost:
+  wxacodeUrlHost:
+
+wxacode:
+  save-path:
+
+pay:
+  wxpay:
+    keyStoreFilePath: /Users/chengzuan/Downloads/apiclient_cert.p12
+    serverIp: 192.168.0.1

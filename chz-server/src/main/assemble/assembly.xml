@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<assembly
+	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.0 http://maven.apache.org/xsd/assembly-1.1.0.xsd">
+	<id>package</id>
+	<formats>
+		<format>zip</format>
+	</formats>
+	<dependencySets>
+		<!-- 项目的依赖 -->
+		<dependencySet>
+			<!-- 排除当前项目的构件 -->
+			<useProjectArtifact>false</useProjectArtifact>
+			<outputDirectory>lib</outputDirectory>
+		</dependencySet>
+	</dependencySets>
+	<fileSets>
+		<!-- 拷贝sh脚本 -->
+		<fileSet>
+			<directory>scripts/sh/</directory>
+			<outputDirectory>bin</outputDirectory>
+			<includes>
+				<include>serverctrl.sh</include>
+			</includes>
+			<fileMode>0755</fileMode>
+		</fileSet>
+
+		<fileSet>
+			<directory>scripts/sh/</directory>
+			<outputDirectory>bin</outputDirectory>
+			<includes>
+				<include>start*.sh</include>
+			</includes>
+			<fileMode>0755</fileMode>
+			<filtered>true</filtered>
+		</fileSet>
+
+		<fileSet>
+			<directory>${project.build.directory}</directory>
+			<outputDirectory>bin</outputDirectory>
+			<includes>
+				<include>${project.artifactId}-${project.version}.jar</include>
+			</includes>
+		</fileSet>
+		<!-- 独立拷贝配置文件到conf -->
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<outputDirectory>conf</outputDirectory>
+			<includes>
+				<include>*.properties</include>
+				<include>*.yml</include>
+				<include>logback.xml</include>
+			</includes>
+		</fileSet>
+		<!-- 独立拷贝配置静态文件和模板文件到webapp -->
+		<fileSet>
+			<directory>src/main/resources</directory>
+			<outputDirectory>webapp</outputDirectory>
+			<includes>
+				<include>static/**</include>
+				<include>templates/**</include>
+			</includes>
+		</fileSet>
+
+		<!-- 提倡建议所有工程输出java API docs和sources jar -->
+		<fileSet>
+			<directory>${project.build.directory}</directory>
+			<outputDirectory>source</outputDirectory>
+			<includes>
+				<include>${project.artifactId}-${project.version}-sources.jar</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.build.directory}</directory>
+			<outputDirectory>docs</outputDirectory>
+			<includes>
+				<include>${project.artifactId}-${project.version}-javadoc.jar</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</assembly>

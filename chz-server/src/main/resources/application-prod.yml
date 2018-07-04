@@ -1,0 +1,36 @@
+spring:
+  redis:
+    host: r-bp17749d9a0a8fc4.redis.rds.aliyuncs.com
+    password:
+    port: 6379
+
+  datasource:
+    username: chz
+    password:
+    url:
+
+  dubbo:
+    registry:
+      protocol: zookeeper
+      address: 10.162.65.119
+      port: 2181
+      client: zkclient
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+
+domain:
+  avatarUrlHost:
+  imageUrlHost:
+  videoUrlHost:
+  wxacodeUrlHost:
+
+wxacode:
+  save-path:
+
+pay:
+  wxpay:
+    keyStoreFilePath: /app/chz/apiclient_cert.p12
+    serverIp: 192.168.0.1

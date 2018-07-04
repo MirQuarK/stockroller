@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true" scanPeriod="1 seconds">
+    <contextName>chz-server.test</contextName>
+    <property name="log_name" value="chz-server" />
+    <!-- direct log messages to stdout -->
+    <appender name="stdout" class="ch.qos.logback.core.ConsoleAppender">
+        <Target>System.out</Target>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%t] %5p |-%c{35}:%L - %m %n</pattern>
+        </encoder>
+    </appender>
+    
+    <appender name="file" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${user.dir}/logs/${log_name}.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <FileNamePattern>${user.dir}/logs/${log_name}.%d{yyyy-MM-dd}.log.gz</FileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%t] %highlight(%5p) %green(|-%c{35}:%L) - %m %n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="com.hzxc.chz" level="DEBUG"/>
+    <logger name="com.corundumstudio" level="TRACE"/>
+
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <includeCallerData>true</includeCallerData>
+        <appender-ref ref="stdout"/>
+    </appender>
+    
+    <root level="INFO">
+        <appender-ref ref="ASYNC"/>
+    </root>
+</configuration>

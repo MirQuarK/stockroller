@@ -1,0 +1,115 @@
+# Server settings (ServerProperties)
+server:
+  port: 8100
+  sessionTimeout: 30
+  contextPath: /
+
+  # Tomcat specifics
+  tomcat:
+    accessLogEnabled: false
+    protocolHeader: x-forwarded-proto
+    remoteIpHeader: x-forwarded-for
+    basedir:
+    backgroundProcessorDelay: 30 # secs
+    
+spring:
+  application:
+    name: chz-server
+  profiles:
+    active: 'local'
+
+  redis:
+      database: 0
+      pool:
+        max-idle: 8
+        min-idle: 0
+        max-active: 50
+        max-wait: -1
+
+  #数据库和连接池通用配置
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      maxLifetime: 1765000 # 一个连接的生命时长（毫秒），超时而且没被使用则被释放（retired），缺省:30分钟
+      maximumPoolSize: 20 # 连接池中允许的最大连接数。缺省值：10
+      connection-init-sql: set names utf8mb4
+
+
+  #jpa
+  jpa:
+    database: MYSQL
+    show-sql: false
+    hibernate:
+      ddl-auto: none
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect : org.hibernate.dialect.MySQL5Dialect
+  #jackson特性
+  jackson:
+    default-property-inclusion: non_null # 忽略null
+
+#dubbo通用配置
+  dubbo:
+    application:
+      name: chz-server     # 必填 服务治理 当前应用名称，用于注册中心计算应用间依赖关系，注意：消费者和提供者应用名不要一样，此参数不是匹配条件，你当前项目叫什么名字就填什么，和提供者消费者角色无关，比如：kylin应用调用了morgan应用的服务，则kylin项目配成kylin，morgan项目配成morgan，可能kylin也提供其它服务给别人使用，但kylin项目永远配成kylin，这样注册中心将显示kylin依赖于morgan 1.0.16以上版本
+      compiler: javassist     # 可选 性能优化 Java字节码编译器，用于动态类的生成，可选：jdk或javassist 2.1.0以上版本
+      logger: slf4j           # 可选 性能优化 日志输出方式，可选：slf4j,jcl,log4j,jdk 2.2.0以上版本
+    protocol:               # 默认的应用协议栈
+      id: dubbo
+      name: dubbo           # 必填 性能调优 协议名称 2.0.5以上版本
+      serialization: fastjson
+#####################################################扫描注解的包###############################################################
+    base-package: com.hzxc.chz.server.service  # 注解所在的包,多个用逗号分割
+#####################################################扫描注解的包###############################################################
+
+#####################################################发布者通用配置信息###############################################################
+    provider:                  # 公用的生产者配置
+      retries: -1              # 可选 性能调优 远程服务调用重试次数，不包括第一次调用，不需要重试请设为0 2.0.5以上版本
+      token: true
+    consumer:
+      retries: 2
+      loadbalance: roundrobin #轮询
+
+info:
+  app:
+    name: "@project.name@" #从pom.xml中获取
+    description: "@project.description@"
+    version: "@project.version@"
+    spring-boot-version: "@project.parent.version@"
+
+#微信开发者平台配置
+wechat:
+  miniAppList:
+    - appId: xxxxxxxxxxxxxx
+      appSecret: xxxxxxxxxxxxxx
+    - appId: xxxxxxxxxxxxxx
+      appSecret: xxxxxxxxxxxxxx
+  qlogoHost: 'http://[0-9a-z_A-Z\.]*/'
+  qlogoReplaceHost: http://wxqlogo.78fans.com/
+  appId: xxxxxxxxxxxxxx
+  appSecret: xxxxxxxxxxxxxx
+
+pay:
+  wxpay:
+    appId: xxxxxxxxxxxxxx
+    mchID: xxxxxxxxxxxxxx
+    apiKey: xxxxxxxxxxxxxx
+
+custom:
+  rmb-withdraw-options: '[{"amount":30,"flag":1},{"amount":3000},{"amount":5000}{"amount":10000}]'
+  #minutes
+  default-max-be-hottime-offset: 480
+  sign-prize: 100,200,300,400,500,600,700
+  new-user-prize-amount: 10
+  cache-manager-allowed-ips: 127.0.0.1,192.168.*.*,10.132.44.203,121.199.24.8,0:0:0:0:0:0:0:1
+  redis-prefix: ''
+
+sms:
+  url: xxxxxxxxxxxxxx
+  corpId: xxxxxxxxxxxxxx
+  corpPwd: xxxxxxxxxxxxxx
+  corpService: xxxxxxxxxxxxxx
+  smsCodeTemplate: "您正在进行系统相关操作，验证码：{smsCode}。请不要把验证码泄漏给其他人。如非本人操作，可不用理会。 --呱呱视频 "
