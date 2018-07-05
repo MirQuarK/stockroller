@@ -19,8 +19,8 @@ public class HttpSessionConfig {
 
     @Bean
     public HttpSessionStrategy httpSessionStrategy() {
-//        return new HeaderHttpSessionStrategy(); // header认证，x-auth-token
-//        return new CookieHttpSessionStrategy(); // cookie认证
-        return new MySessionStrategy(); // 自定义的认证策略，结合header和cookie
+//        return new HeaderHttpSessionStrategy();
+//        return new CookieHttpSessionStrategy();
+        return new MySessionStrategy();
     }
 }

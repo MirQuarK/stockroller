@@ -9,9 +9,17 @@ import javax.servlet.http.HttpServletRequest;
  * create by chz on 2018/1/26
  */
 public class AbstractControler {
-    Long getUserId(HttpServletRequest request) {
-        return (Long) request.getSession().getAttribute(Constant.SESSION_USER_ID_KEY);
+
+    int getUserId(HttpServletRequest request) {
+        try {
+            return (int) request.getSession().getAttribute(Constant.SESSION_USER_ID_KEY);
+        } catch (Exception e) {}
+        return  0;
     }
+    String getUserMobile(HttpServletRequest request) {
+        return (String) request.getSession().getAttribute(Constant.SESSION_USER_MOBILE);
+    }
+
     String getNickname(HttpServletRequest request) {
         return (String) request.getSession().getAttribute(Constant.SESSION_USER_NICKNAME_KEY);
     }

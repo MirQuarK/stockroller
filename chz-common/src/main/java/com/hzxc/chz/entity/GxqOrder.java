@@ -6,16 +6,20 @@ import java.util.Date;
 // TODO 去外键
 // 用户订单
 @Entity
-@Table(indexes = {@Index(name = "gxq_order_index_create_user",  columnList="create_user, status", unique = false),
-        @Index(name = "gxq_order_index_create_time", columnList="create_time", unique = false)})
+@Table(indexes = {@Index(name = "gxq_order_index_user",  columnList="user_id, status", unique = false),
+        @Index(name = "gxq_order_index_time", columnList="user_id", unique = false)})
 public class GxqOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private int id;
 
+    @Column(name = "user_id", columnDefinition="int default 0 ")
+    private int userId;
+    @Column(columnDefinition="int default 0 ")
     private int createUser;
 
     private Long gxqProductId;
+    @Column(columnDefinition="int default 0 ")
     private int stockId;
     @Column( columnDefinition="int(11) comment '申购金额'")
     private int subscribeMoney;
@@ -25,19 +29,28 @@ public class GxqOrder {
     @Column( columnDefinition="int(11) comment '盈利金额'")
     private int gainMoney;
 
+    @Column(columnDefinition="int default 0 ")
     private int updateUser;
 //    @Column( columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP comment '创建时间'")
-    @Column( columnDefinition="datetime comment '创建时间'")   // 老版本mysql不支持两个时间戳设置,用这个
+    @Column(name = "create_time", columnDefinition="datetime comment '创建时间'")   // 老版本mysql不支持两个时间戳设置,用这个
     private Date createTime;
     @Column( columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ")
     private Date updateTime;
 
     private String Comment;
-    @Column(length = 4, columnDefinition="int(4) comment '状态' ")
+    @Column(name = "status", length = 4, columnDefinition="int(4) default 1 comment '状态' ")
     private int status;
 
     @Transient
     private GxqProduct gxqProduct;
+
+    public int getUserId () {
+        return userId;
+    }
+
+    public void setUserId (int userId) {
+        this.userId = userId;
+    }
 
     public GxqProduct getGxqProduct () {
         return gxqProduct;
@@ -112,11 +125,11 @@ public class GxqOrder {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public Date getCreateTime() {

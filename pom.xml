@@ -10,11 +10,9 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>chz-server</module>
-        <module>chz-admin</module>
         <module>chz-utils</module>
         <module>chz-common</module>
         <module>chz-dao</module>
-        <module>chz-gather</module>
     </modules>
 
     <parent>

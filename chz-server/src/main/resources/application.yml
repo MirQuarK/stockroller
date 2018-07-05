@@ -1,6 +1,6 @@
 # Server settings (ServerProperties)
 server:
-  port: 8100
+  port: 8400
   sessionTimeout: 30
   contextPath: /
 

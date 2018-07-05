@@ -10,20 +10,25 @@ import java.util.Date;
 public class GxqProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private int id;
 
+    @Column(columnDefinition="int default 0 ")
+    private int userId;
     private String productName;
+    @Column(columnDefinition="int default 0 ")
     private int stockId;
     private String Comment;
-    @Column( columnDefinition="int(11) comment '申购金额'")
+    @Column( columnDefinition="int default 0 comment '申购金额'")
     private int subscribeMoney;
-    @Column( columnDefinition="int(11) comment '权利金'")
+    @Column( columnDefinition="int default 0 comment '权利金'")
     private int rightMoney;
-    @Column( columnDefinition="int(11) comment '申购周期'")
+    @Column( columnDefinition="int default 0 comment '申购周期'")
     private int subscribeTime;
     private String state;
 
+    @Column(columnDefinition="int default 0 ")
     private int createUser;
+    @Column(columnDefinition="int default 0 ")
     private int updateUser;
 //    @Column( columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP comment '创建时间'")
     @Column( columnDefinition="datetime comment '创建时间'")   // 老版本mysql不支持两个时间戳设置,用这个
@@ -31,8 +36,16 @@ public class GxqProduct {
     @Column( columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ")
     private Date updateTime;
 
-    @Column(length = 4, columnDefinition="int(4) comment '状态' ")
+    @Column(length = 4, columnDefinition="int(4) default 1 comment '状态' ")
     private int status;
+
+    public int getUserId () {
+        return userId;
+    }
+
+    public void setUserId (int userId) {
+        this.userId = userId;
+    }
 
     public String getProductName () {
         return productName;
@@ -99,11 +112,11 @@ public class GxqProduct {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public Date getCreateTime() {

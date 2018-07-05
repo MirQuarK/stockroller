@@ -1,0 +1,16 @@
+.idea
+logs
+*.lock
+*.st
+*.iml
+chz-admin/target
+chz-common/target
+chz-dao/target
+chz-login/target
+chz-gather/target
+chz-server/target
+chz-utils/target
+chz-spider/vid
+chz-spider/img
+*.pyc
+chz-spider/xigua

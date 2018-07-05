@@ -4,7 +4,7 @@ package com.hzxc.chz.dto;
  * 登录请求的响应
  */
 public class LoginResponse extends CommonResponse {
-    private Long userId;
+    private int userId;
     private String token;
     private String wechatNick;
     private String unionId;
@@ -62,11 +62,11 @@ public class LoginResponse extends CommonResponse {
         this.wechatNick = wechatNick;
     }
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 

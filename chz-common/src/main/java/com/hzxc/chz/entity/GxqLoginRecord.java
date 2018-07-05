@@ -12,8 +12,8 @@ import java.util.Date;
 public class GxqLoginRecord extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private Long userId;
+    private int id;
+    private int userId;
     private Date loginTime;
     @Column(length = 15)
     private String ip;
@@ -22,11 +22,11 @@ public class GxqLoginRecord extends BaseEntity{
     @Column(length = 36)
     private String shareUuid;//从自定义分享进入
 
-    public Long getUserId() {
+    public int getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(int userId) {
         this.userId = userId;
     }
 
@@ -38,11 +38,11 @@ public class GxqLoginRecord extends BaseEntity{
         this.loginTime = loginTime;
     }
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 

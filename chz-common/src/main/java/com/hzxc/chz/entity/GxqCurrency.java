@@ -9,9 +9,13 @@ import java.util.Date;
 public class GxqCurrency {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private int id;
 
+    @Column(columnDefinition="int default 0 ")
+    private int userId;
+    @Column(columnDefinition="int default 0 ")
     private int createUser;
+    @Column(columnDefinition="int default 0 ")
     private int updateUser;
 //    @Column( columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP comment '创建时间'")
     @Column( columnDefinition="datetime comment '创建时间'")   // 老版本mysql不支持两个时间戳设置,用这个
@@ -19,8 +23,16 @@ public class GxqCurrency {
     @Column( columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ")
     private Date updateTime;
     private String Comment;
-    @Column(length = 4, columnDefinition="int(4) comment '状态' ")
+    @Column(length = 4, columnDefinition="int(4) default 0 comment '状态' ")
     private int status;
+
+    public int getUserId () {
+        return userId;
+    }
+
+    public void setUserId (int userId) {
+        this.userId = userId;
+    }
 
     public int getCreateUser() {
         return createUser;
@@ -39,11 +51,11 @@ public class GxqCurrency {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        this.id = id;
     }
 
     public Date getCreateTime() {

@@ -8,4 +8,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * create by chz on 2017/12/20
  */
 public interface GxqCurrencyRepository extends JpaRepository<GxqCurrency, Long> {
+//    void initUserCurrency(Long userId);
 }

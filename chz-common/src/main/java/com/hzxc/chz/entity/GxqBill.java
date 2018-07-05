@@ -10,16 +10,20 @@ import java.util.Date;
 public class GxqBill {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int Id;
+    private int id;
 
     private int orderId;
-    @Column(length = 4, columnDefinition="int(4) comment '账单类型' ")
+    @Column(length = 4, columnDefinition="int(4) default 1 comment '账单类型' ")
     private int billType;
+    @Column(columnDefinition="int default 0 ")
     private int billMoney;
-    @Column(length = 4, columnDefinition="int(4) comment '账单收支类型' ")
+    @Column(length = 4, columnDefinition="int(4) default 1 comment '账单收支类型' ")
     private int billInout;
 
+    private int userId;
+    @Column(columnDefinition="int default 0 ")
     private int createUser;
+    @Column(columnDefinition="int default 0 ")
     private int updateUser;
 //    @Column( columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP comment '创建时间'")
     @Column( columnDefinition="datetime comment '创建时间'")   // 老版本mysql不支持两个时间戳设置,用这个
@@ -27,12 +31,21 @@ public class GxqBill {
     @Column( columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ")
     private Date updateTime;
     private String Comment;
-    @Column(length = 4, columnDefinition="int(4) comment '状态' ")
+    @Column(length = 4, columnDefinition="int(4) default 1 comment '状态' ")
     private int status;
 
     // 管理订单
     @Transient
     private GxqOrder gxqOrder;
+
+
+    public int getUserId () {
+        return userId;
+    }
+
+    public void setUserId (int userId) {
+        this.userId = userId;
+    }
 
     public int getOrderId () {
         return orderId;
@@ -67,11 +80,11 @@ public class GxqBill {
     }
 
     public int getId() {
-        return Id;
+        return id;
     }
 
     public void setId(int id) {
-        Id = id;
+        id = id;
     }
 
     public int getBillType() {

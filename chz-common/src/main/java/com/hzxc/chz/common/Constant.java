@@ -46,6 +46,7 @@ public class Constant {
     public static final String SESSION_USER_CHANNEL_ID = "userChannelId";
     public static final String SESSION_APP_TYPE = "apptype";
     public static final String SESSION_USER_ROLE = "userrole";
+    public static final String SESSION_USER_MOBILE = "userMobile";
 
     public static final String GOLD_EXCHANGE = "金币兑换";
     public static final String RMB_WITHDRAW = "提现";
@@ -83,7 +84,7 @@ public class Constant {
         return "GOOD_TOPIC_ZSET_POS_" + userId;
     }
 
-    public static String getUserShortMsgKey(Long userId) {
+    public static String getUserShortMsgKey(int userId) {
         return KEY_USER_SHORT_MSG_PREFIX + userId;
     }
 

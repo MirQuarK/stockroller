@@ -15,18 +15,18 @@ public class GxqSystemConfig extends BaseEntity {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
     @Column(length = 50,nullable = false)
     private String configKey;
     private String configValue;
     @Column(name = "[group]", nullable = false)
     private String group;
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
