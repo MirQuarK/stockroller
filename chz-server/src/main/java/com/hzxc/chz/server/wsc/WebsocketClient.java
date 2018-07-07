@@ -3,7 +3,9 @@ package com.hzxc.chz.server.wsc;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.drafts.Draft_6455;
 import org.java_websocket.handshake.ServerHandshake;
+import org.springframework.stereotype.Service;
 
+import javax.annotation.PostConstruct;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Map;
@@ -11,8 +13,11 @@ import java.util.Map;
 /**
  * Created by cz on 2017/3/31.
  */
+@Service
 public class WebsocketClient implements WebsocketClientInter{
     public static WebSocketClient client = null;
+    @PostConstruct
+    @Override
     public void init() {
         try {
             client = new WebSocketClient(new URI("ws://114.55.150.38:8008/"),new Draft_6455()) {
