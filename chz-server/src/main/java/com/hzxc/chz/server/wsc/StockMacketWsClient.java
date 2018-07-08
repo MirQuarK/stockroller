@@ -2,6 +2,7 @@ package com.hzxc.chz.server.wsc;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -11,9 +12,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-public class StockMacketDataRequestClient extends WebsocketClient {
+@Service
+public class StockMacketWsClient extends WebsocketClient {
 
-    private static final Log logger = LogFactory.getLog(StockMacketDataRequestClient.class);
+    private static final Log logger = LogFactory.getLog(StockMacketWsClient.class);
 
     @Override
     public void handlerOpen() {
@@ -51,8 +53,10 @@ public class StockMacketDataRequestClient extends WebsocketClient {
         }
     }
 
+    // 根据消息调用不同命令
     public static void callHandlerFunc(String cmd, Document document) {
-        String className="com.codepool.websocketclient.StockMacketDataRequestClient"; //类名
+        logger.debug("in call handlerFunc smc = " + cmd);
+        String className="com.hzxc.chz.server.wsc.StockMacketWsClient"; //类名
         Class[] params = new Class[]{Document.class};//参数
         String methodName = cmd;//方法名
         Object obj = null;     //调用方法的对象, 静态对象为null
@@ -66,15 +70,17 @@ public class StockMacketDataRequestClient extends WebsocketClient {
 
     // 登陆成功回调
     public static void OnRspUserLogin(Document document){
-        StockMarketDataRequest.getMacketData("600152");
+        // test ask stock data.
+        StockMarketDataRequest.getMarcketData("600152");
     }
 
-    // 提交查询回调
+    // 提交查询数据消息处理
     public static void OnRspSubMarketData(Document document) {
 
     }
 
-    // 获取深度行情回调
+    // 获取深度行情数据消息处理.
+    // TODO 保存缓存.给wss用
     public static void OnRtnDepthMarketData(Document document) {
         try {
             NamedNodeMap aa = document.getFirstChild().getAttributes();
