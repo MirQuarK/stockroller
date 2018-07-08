@@ -6,6 +6,7 @@ import com.hzxc.chz.server.service.GxqOrderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -20,7 +21,11 @@ public class GxqOrderServiceImpl implements GxqOrderService {
 
     @Override
     public List<GxqOrder> getByTimePage (int userId, Date start, Date end, int sindex, int count) {
-        return gxqOrderRepository.getByTimePage(userId, start.toString(), end.toString(), sindex, count);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String a = sdf.format(start);
+        String b = sdf.format(end);
+
+        return gxqOrderRepository.getByTimePage(userId, a, b, sindex, count);
     }
 
     @Override

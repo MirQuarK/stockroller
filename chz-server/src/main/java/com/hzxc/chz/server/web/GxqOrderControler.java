@@ -2,6 +2,7 @@ package com.hzxc.chz.server.web;
 
 import com.hzxc.chz.common.enums.ResultCodeEnum;
 import com.hzxc.chz.dto.JsonResult;
+import com.hzxc.chz.entity.GxqOrder;
 import com.hzxc.chz.server.annotation.CheckLogin;
 import com.hzxc.chz.server.service.GxqOrderService;
 import com.hzxc.chz.service.DistributionLock;
@@ -13,7 +14,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 @RestController
 public class GxqOrderControler extends AbstractControler {
@@ -28,15 +33,22 @@ public class GxqOrderControler extends AbstractControler {
     @CheckLogin
     @RequestMapping(value = "getOrderByDate", produces = "application/json")
     public JsonResult getOrderByDate(
-            @RequestParam Date start,
-            @RequestParam Date end,
+            @RequestParam String start,
+            @RequestParam String end,
             @RequestParam int page,
             @RequestParam int count,
             HttpServletRequest request) {
         int userId = getUserId(request);
-        gxqOrderService.getByTimePage(userId, start, end, page * count, count);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success");
+        List<GxqOrder> lo = new LinkedList<>();
+        try {
+            lo = gxqOrderService.getByTimePage(userId, sdf.parse(start), sdf.parse(end), page * count, count);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(lo);
     }
 
     @CheckLogin
@@ -46,6 +58,7 @@ public class GxqOrderControler extends AbstractControler {
             HttpServletRequest request) {
         int userId = getUserId(request);
 
-        return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success");
+        GxqOrder o = gxqOrderService.getByUserIdAndId(userId, id);
+        return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(o);
     }
 }

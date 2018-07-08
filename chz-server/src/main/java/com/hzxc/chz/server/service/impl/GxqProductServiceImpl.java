@@ -6,6 +6,7 @@ import com.hzxc.chz.server.service.GxqProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -19,7 +20,10 @@ public class GxqProductServiceImpl implements GxqProductService {
 
     @Override
     public List<GxqProduct> getByTimePage (int userId, Date start, Date end, int sindex, int count) {
-        return gxqProductRepository.getByTimePage(userId, start.toString(), end.toString(), sindex, count);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String a = sdf.format(start);
+        String b = sdf.format(end);
+        return gxqProductRepository.getByTimePage(userId, a, b, sindex, count);
     }
 
     @Override

@@ -6,9 +6,9 @@ spring:
 
   datasource:
     username: root
-    password: root
-#    url: jdbc:mysql://localhost:3308/guxueqiu?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=true
-    url: jdbc:mysql://localhost:3307/guxueqiu?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=true
+    password:
+    url: jdbc:mysql://localhost:3308/guxueqiu?useUnicodnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=true
+#    url: jdbc:mysql://localhost:3307/guxueqiu?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&useSSL=true
 
   jpa:
     show-sql: true
