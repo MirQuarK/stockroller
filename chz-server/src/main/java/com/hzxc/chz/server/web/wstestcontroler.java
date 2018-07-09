@@ -26,4 +26,14 @@ public class wstestcontroler extends AbstractControler{
 
         return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success");
     }
+
+    @RequestMapping(value = "ungetws", produces = "application/json")
+    public JsonResult unGetProductById(
+            @RequestParam String stockid,
+            HttpServletRequest request) {
+        int userId = getUserId(request);
+        StockMarketDataRequest.unGetMarcketData(stockid);
+
+        return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success");
+    }
 }

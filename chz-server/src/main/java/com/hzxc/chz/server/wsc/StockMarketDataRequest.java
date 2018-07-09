@@ -6,4 +6,10 @@ public class StockMarketDataRequest {
         String req = "<SubscribeMarketData RequestID=\"1\"><item InstrumentID=\""+stockId+".SH\"  E=\"SSE\" /></SubscribeMarketData>\n\n";
         StockMacketWsClient.send(req);
     }
+
+    public static void unGetMarcketData(String stockId) {
+        String req = "<UnSubscribeMarketData RequestID=\"1\"><item InstrumentID=\""+stockId+".SH\"  E=\"SSE\" /></UnSubscribeMarketData>\n\n";
+        StockMacketWsClient.send(req);
+    }
+
 }

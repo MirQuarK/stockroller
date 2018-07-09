@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<script src="ssapi.js"></script>
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div>
+        </div>
+    </form>
+	<script>
+		var InstrumentArray = [{ InstrumentID: '999999.SH', ExchangeID: 'SSE' },
+		{ InstrumentID: '399001.SZ', ExchangeID: 'SZE' },
+		{ InstrumentID: '399006.SZ', ExchangeID: 'SZE' },
+		{ InstrumentID: '600123.SH', ExchangeID: 'SSE' }];
+
+		var mdapi = new ssMdApi("ws://114.55.150.38:8008/");
+		mdapi.OnFrontConnected = function () {
+			var req = {
+				BrokerID: "FULL",
+				SubscribeInstStatus: "1"
+			};
+
+			//登录
+			mdapi.ReqUserLogin(req, mdOnRspUserLogin);
+		}
+
+		mdapi.OnFrontDisconnected = function () {
+			//if (ShowErrMsg) {
+			//    ShowErrMsg("行情连接断开");
+			//}
+			//else {
+			//    alert("行情连接断开");
+			//}
+		}
+
+		//登录回调
+		function mdOnRspUserLogin(data, rspInfo) {
+			if (rspInfo.ErrorID == 0) {
+				//订阅行情
+				mdapi.SubscribeMarketData(InstrumentArray);
+			}
+			else {
+				//if (ShowErrMsg) {
+				//    ShowErrMsg("行情连接断开");
+				//}
+				//else {
+				//    alert("行情连接断开");
+				//}
+				//err("行情登录失败" + rspInfo.ErrorID + ":" + rspInfo.ErrorMsg);
+			}
+		}
+		mdapi.OnRtnMarketData = function (data) {
+			console.log(JSON.stringify(data));
+		}
+		//合约交易状态通知
+		mdapi.OnRtnInstrumentStatus = function (data) {
+			console.log(JSON.stringify(data));
+		}
+		mdapi.Init();
+	</script>
+</body>
+</html>

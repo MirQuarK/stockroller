@@ -53,7 +53,7 @@ public class StockMacketWsClient extends WebsocketClient {
         }
     }
 
-    // 根据消息调用不同命令
+    // reflect call back
     public static void callHandlerFunc(String cmd, Document document) {
         logger.debug("in call handlerFunc smc = " + cmd);
         String className="com.hzxc.chz.server.wsc.StockMacketWsClient"; //类名
@@ -71,7 +71,11 @@ public class StockMacketWsClient extends WebsocketClient {
     // 登陆成功回调
     public static void OnRspUserLogin(Document document){
         // test ask stock data.
-        StockMarketDataRequest.getMarcketData("600152");
+        StockMarketDataRequest.getMarcketData("600519");
+    }
+
+    public static void OnRspUnSubMarketData(Document documenit) {
+
     }
 
     // 提交查询数据消息处理
@@ -94,7 +98,25 @@ public class StockMacketWsClient extends WebsocketClient {
 
     // 合约交易状态通知回调
     public static void OnRtnInstrumentStatus(Document document) {
+        try {
+            NamedNodeMap aa = document.getFirstChild().getAttributes();
+            Node nn = aa.getNamedItem("EI");
+            String EI = nn.getNodeName();
+            logger.info("in OnRtnInstrumentStatus ei = " + EI);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
+    public static void OnRtnStockMarketData(Document document) {
+        try {
+            NamedNodeMap aa = document.getFirstChild().getAttributes();
+            Node nn = aa.getNamedItem("EI");
+            String EI = nn.getNodeName();
+            logger.info("in OnRtnStockMarketData ei = " + EI);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 /*
     //深度行情通知

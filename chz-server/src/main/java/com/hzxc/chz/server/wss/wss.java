@@ -1,9 +1,15 @@
 package com.hzxc.chz.server.wss;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import javax.websocket.*;
+import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 @ServerEndpoint(value = "/websocket")
@@ -18,11 +24,29 @@ public class wss {
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
 
+    public static Map<String, List<Session>> mapStockUser = new HashMap<>();
+    public static Map<Session, List<String>> mapUserStock = new HashMap<>();
+    public static Map<String, Session> mapUserSession = new HashMap<>();
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * 连接建立成功调用的方法
      * */
     @OnOpen
-    public void onOpen(Session session) {
+    public void onOpen(@PathParam(value="param") String param, Session session) {
+
+        if(!redisTemplate.hasKey("spring:session:sessions:" + param)) {
+            try {
+                sendMessage("not login");
+                session.close();
+            } catch (IOException e) {
+                System.out.println("IO异常");
+            }
+            return;
+        }
+
         this.session = session;
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1
@@ -72,15 +96,13 @@ public class wss {
      error.printStackTrace();
      }
 
-
      public void sendMessage(String message) throws IOException {
-     this.session.getBasicRemote().sendText(message);
-     //this.session.getAsyncRemote().sendText(message);
+         this.session.getBasicRemote().sendText(message);
+         //this.session.getAsyncRemote().sendText(message);
      }
 
-
      /**
-      * 群发自定义消息
+      * 群发自定义消息, 我们不要群发，客户的自选股都是独立的。
       * */
     public static void sendInfo(String message) throws IOException {
         for (wss item : webSocketSet) {
