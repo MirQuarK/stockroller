@@ -1,8 +1,10 @@
 package com.hzxc.chz.server.wss;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
+
 import javax.websocket.*;
 import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
@@ -12,14 +14,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-@ServerEndpoint(value = "/websocket")
+@ServletComponentScan
+@ServerEndpoint(value = "/websocket/{param}", configurator = MyEndpointConfigure.class)
 @Component
 public class wss {
+
+    @Autowired
+    RedisTemplate redisTemplate;
+
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
     private static int onlineCount = 0;
 
     //concurrent包的线程安全Set，用来存放每个客户端对应的MyWebSocket对象。
-    private static CopyOnWriteArraySet<wss> webSocketSet = new CopyOnWriteArraySet<wss>();
+    private static CopyOnWriteArraySet<wss> webSocketSet = new CopyOnWriteArraySet<>();
 
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
@@ -28,14 +35,16 @@ public class wss {
     public static Map<Session, List<String>> mapUserStock = new HashMap<>();
     public static Map<String, Session> mapUserSession = new HashMap<>();
 
-    @Autowired
-    private RedisTemplate redisTemplate;
-
     /**
      * 连接建立成功调用的方法
      * */
     @OnOpen
     public void onOpen(@PathParam(value="param") String param, Session session) {
+        String rkey = "spring:session:sessions:" + param;
+
+        this.session = session;
+        webSocketSet.add(this);     //加入set中
+        addOnlineCount();           //在线数加1
 
         if(!redisTemplate.hasKey("spring:session:sessions:" + param)) {
             try {
@@ -47,9 +56,6 @@ public class wss {
             return;
         }
 
-        this.session = session;
-        webSocketSet.add(this);     //加入set中
-        addOnlineCount();           //在线数加1
         System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
         try {
             sendMessage("");
