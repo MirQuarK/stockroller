@@ -1,5 +1,8 @@
 package com.hzxc.chz.server.wsc;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.hzxc.chz.server.wss.wss;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.stereotype.Service;
@@ -90,7 +93,10 @@ public class StockMacketWsClient extends WebsocketClient {
             NamedNodeMap aa = document.getFirstChild().getAttributes();
             Node nn = aa.getNamedItem("EI");
             String EI = nn.getNodeName();
+            String vv = nn.getNodeValue();
+            String[] st = vv.split("\\.");
             logger.info("in OnRtnDepthMarketData ei = " + EI);
+            wss.SendStockInfo(st[0], JSON.toJSONString(document));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -103,6 +109,7 @@ public class StockMacketWsClient extends WebsocketClient {
             Node nn = aa.getNamedItem("EI");
             String EI = nn.getNodeName();
             logger.info("in OnRtnInstrumentStatus ei = " + EI);
+            //
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -114,6 +121,7 @@ public class StockMacketWsClient extends WebsocketClient {
             Node nn = aa.getNamedItem("EI");
             String EI = nn.getNodeName();
             logger.info("in OnRtnStockMarketData ei = " + EI);
+            //
         } catch (Exception e) {
             e.printStackTrace();
         }

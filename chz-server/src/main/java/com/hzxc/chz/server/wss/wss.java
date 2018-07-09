@@ -1,5 +1,6 @@
 package com.hzxc.chz.server.wss;
 
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -31,7 +32,7 @@ public class wss {
     //与某个客户端的连接会话，需要通过它来给客户端发送数据
     private Session session;
 
-    public static Map<String, List<Session>> mapStockUser = new HashMap<>();
+    public static Map<String, Map<wss, Session>> mapStockUser = new HashMap<>();
     public static Map<Session, List<String>> mapUserStock = new HashMap<>();
     public static Map<String, Session> mapUserSession = new HashMap<>();
 
@@ -46,7 +47,7 @@ public class wss {
         webSocketSet.add(this);     //加入set中
         addOnlineCount();           //在线数加1
 
-        if(!redisTemplate.hasKey("spring:session:sessions:" + param)) {
+        if(!redisTemplate.hasKey(rkey)) {
             try {
                 sendMessage("not login");
                 session.close();
@@ -64,42 +65,40 @@ public class wss {
         }
     }
 
-    /**
-     * 连接关闭调用的方法
-     */
     @OnClose
     public void onClose() {
         webSocketSet.remove(this);  //从set中删除
         subOnlineCount();           //在线数减1
+
+        // del stock wss
+        for(String stock : mapStockUser.keySet()) {
+            Map<wss, Session> m = mapStockUser.get(stock);
+            m.remove(this);
+        }
+
         System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
     }
 
-    /**
-     * 收到客户端消息后调用的方法
-     *
-     * @param message 客户端发送过来的消息
-     * */
     @OnMessage
     public void onMessage(String message, Session session) {
         System.out.println("来自客户端的消息:" + message);
 
-        //群发消息
-        for (wss item : webSocketSet) {
-            try {
-                item.sendMessage(message);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        JSONObject jobj = (JSONObject) new JSONObject().parse(message);
+        String stock = jobj.getString("stock");
+        String cmd = jobj.getString("cmd");
+        Map<wss, Session> ls = mapStockUser.get(stock);
+        if(ls == null) ls = new HashMap<>();
+        if(cmd.equalsIgnoreCase("add")) {
+            ls.put(this, session);
+        } else if(cmd.equalsIgnoreCase("del")) {
+            ls.remove(session);
         }
     }
 
-    /**
-     * 发生错误时调用
-     * */
      @OnError
      public void onError(Session session, Throwable error) {
-     System.out.println("发生错误");
-     error.printStackTrace();
+        System.out.println("发生错误");
+        error.printStackTrace();
      }
 
      public void sendMessage(String message) throws IOException {
@@ -107,18 +106,21 @@ public class wss {
          //this.session.getAsyncRemote().sendText(message);
      }
 
-     /**
-      * 群发自定义消息, 我们不要群发，客户的自选股都是独立的。
-      * */
-    public static void sendInfo(String message) throws IOException {
-        for (wss item : webSocketSet) {
-            try {
-                item.sendMessage(message);
-            } catch (IOException e) {
-                continue;
-            }
-        }
-    }
+    // send stock info to all needed user
+     public static void SendStockInfo(String stock, String msg) {
+         Map<wss, Session> ms = mapStockUser.get(stock);
+         if(ms == null) {
+             ms = new HashMap<>();
+         }
+
+         for(wss s: ms.keySet()) {
+             try {
+                 s.sendMessage(msg);
+             } catch (IOException e) {
+                 e.printStackTrace();
+             }
+         }
+     }
 
     public static synchronized int getOnlineCount() {
         return onlineCount;
