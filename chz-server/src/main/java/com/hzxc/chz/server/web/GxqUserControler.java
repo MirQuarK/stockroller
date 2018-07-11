@@ -6,6 +6,7 @@ import com.hzxc.chz.dao.GxqUserRepository;
 import com.hzxc.chz.dto.JsonResult;
 import com.hzxc.chz.entity.GxqUser;
 import com.hzxc.chz.server.annotation.CheckLogin;
+import com.hzxc.chz.server.service.SmsService;
 import com.hzxc.chz.service.DistributionLock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,6 +35,9 @@ public class GxqUserControler extends AbstractControler {
 
     @Autowired
     RedisTemplate redisTemplate;
+
+    @Autowired
+    SmsService smsService;
 
     @CheckLogin(role = "ADMIN")
     @RequestMapping(value = "emp/js/getuserlist", produces = "application/json")
@@ -84,7 +88,7 @@ public class GxqUserControler extends AbstractControler {
         String code = (String)redisTemplate.opsForValue().get(key);
 
         if(code == null) {
-//            code = smsService.sendSmsCode(mobile);//"" + (int)((Math.random()*9+1)*100000);
+            code = smsService.sendSmsCode(mobile);//"" + (int)((Math.random()*9+1)*100000);
             redisTemplate.opsForValue().set(key, code, 60 * 200, TimeUnit.SECONDS);
         }
 

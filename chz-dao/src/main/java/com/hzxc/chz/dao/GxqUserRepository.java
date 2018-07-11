@@ -22,7 +22,7 @@ public interface GxqUserRepository extends JpaRepository<GxqUser, Long> {
 
     @Transactional
     @Modifying
-    void deleteByUserId(int userId);
+    void deleteById(int userId);
 
     Page<GxqUser> findAll(Pageable pageable);
 }

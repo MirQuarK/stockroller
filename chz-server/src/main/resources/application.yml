@@ -11,7 +11,11 @@ server:
     remoteIpHeader: x-forwarded-for
     basedir:
     backgroundProcessorDelay: 30 # secs
-    
+
+  ssl:
+    key-store: tomcat.keystore
+    key-store-password: 123456
+
 spring:
   application:
     name: chz-server
