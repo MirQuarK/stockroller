@@ -27,7 +27,26 @@ public class GxqProductServiceImpl implements GxqProductService {
     }
 
     @Override
+    public int getCount (int userId, Date start, Date end) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String a = sdf.format(start);
+        String b = sdf.format(end);
+        return gxqProductRepository.getCount(userId, a, b);
+    }
+
+    @Override
     public GxqProduct getByUserIdAndId (int userId, int id) {
         return gxqProductRepository.getByUserIdAndId(userId, id);
+    }
+
+    @Override
+    public boolean saveProduct(GxqProduct gp) {
+        try {
+            gxqProductRepository.save(gp);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 }

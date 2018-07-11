@@ -18,7 +18,7 @@ public class GxqOrder {
     @Column(columnDefinition="int default 0 ")
     private int createUser;
 
-    private Long gxqProductId;
+    private int gxqProductId;
     @Column(columnDefinition="int default 0 ")
     private int stockId;
     @Column( columnDefinition="int(11) comment '申购金额'")
@@ -60,11 +60,11 @@ public class GxqOrder {
         this.gxqProduct = gxqProduct;
     }
 
-    public Long getGxqProductId () {
+    public int getGxqProductId () {
         return gxqProductId;
     }
 
-    public void setGxqProductId (Long gxqProductId) {
+    public void setGxqProductId (int gxqProductId) {
         this.gxqProductId = gxqProductId;
     }
 

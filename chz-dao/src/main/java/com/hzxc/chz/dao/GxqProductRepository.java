@@ -14,5 +14,9 @@ public interface GxqProductRepository extends JpaRepository<GxqProduct, Long> {
             ,nativeQuery = true)
     List<GxqProduct> getByTimePage(int userId, String start, String end, int sindex, int index);
 
+    @Query(value = "select count(*) from gxq_product where user_id = ?1 and create_time BETWEEN ?2 and ?3"
+            ,nativeQuery = true)
+    int getCount(int userId, String start, String end);
+
     GxqProduct getByUserIdAndId(int userId, int id);
 }

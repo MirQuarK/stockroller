@@ -16,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class GxqOrderControler extends AbstractControler {
@@ -42,11 +40,16 @@ public class GxqOrderControler extends AbstractControler {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         List<GxqOrder> lo = new LinkedList<>();
+        int c = 0;
         try {
+            c = gxqOrderService.getCount(userId, sdf.parse(start), sdf.parse(end));
             lo = gxqOrderService.getByTimePage(userId, sdf.parse(start), sdf.parse(end), page * count, count);
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        Map<String, Object> retmap = new HashMap<>();
+        retmap.put("total_count", c);
+        retmap.put("data", lo);
 
         return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(lo);
     }
@@ -60,5 +63,44 @@ public class GxqOrderControler extends AbstractControler {
 
         GxqOrder o = gxqOrderService.getByUserIdAndId(userId, id);
         return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(o);
+    }
+
+    @CheckLogin(role = "ADMIN")
+    @RequestMapping(value = "addOrder", produces = "application/json")
+    public JsonResult addOrder(@RequestParam int userid,
+                               @RequestParam int gainmoney,
+                               @RequestParam int redeemmoney,
+                               @RequestParam int stockcount,
+                               @RequestParam int stockid,
+                               @RequestParam int subscribemoney,
+                               @RequestParam(required = false, defaultValue = "") String comment,
+                               @RequestParam(required = false, defaultValue = "0") int productid,
+                               HttpServletRequest request) {
+
+        GxqOrder go = new GxqOrder();
+        go.setCreateUser(getUserId(request));
+        go.setGainMoney(gainmoney);
+        go.setGxqProductId(productid);
+        go.setComment(comment);
+        go.setRedeemMoney(redeemmoney);
+        go.setStockCount(stockcount);
+        go.setStockId(stockid);
+        go.setSubscribeMoney(subscribemoney);
+        go.setStatus(1);
+        go.setUserId(userid);
+        long nowTime = System.currentTimeMillis();
+        go.setCreateTime(new Date(nowTime));
+
+        boolean ret = gxqOrderService.saveOrder(go);
+
+        return new JsonResult().success().data(ret);
+    }
+
+    @CheckLogin(role = "ADMIN")
+    @RequestMapping(value = "modifyOrder", produces = "application/json")
+    public JsonResult modifyOrder(@RequestParam int userid,
+                                 @RequestParam int orderid,
+                                 HttpServletRequest request) {
+        return new JsonResult().success();
     }
 }

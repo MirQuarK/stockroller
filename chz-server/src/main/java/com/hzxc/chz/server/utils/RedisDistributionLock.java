@@ -1,4 +1,4 @@
-package com.hzxc.chz.server.util;
+package com.hzxc.chz.server.utils;
 
 import com.hzxc.chz.service.DistributionLock;
 import org.apache.commons.lang3.RandomStringUtils;

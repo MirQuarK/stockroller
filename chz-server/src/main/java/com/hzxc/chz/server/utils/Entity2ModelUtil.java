@@ -1,4 +1,4 @@
-package com.hzxc.chz.server.util;
+package com.hzxc.chz.server.utils;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

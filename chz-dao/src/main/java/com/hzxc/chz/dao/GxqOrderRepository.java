@@ -16,5 +16,9 @@ public interface GxqOrderRepository extends JpaRepository<GxqOrder, Long> {
             ,nativeQuery = true)
     List<GxqOrder> getByTimePage(int userId, String start, String end, int sindex, int index);
 
+    @Query(value = "select count(*) from gxq_order where user_id = ?1 and create_time BETWEEN ?2 and ?3 "
+            ,nativeQuery = true)
+    int getCount(int userId, String start, String end);
+
     GxqOrder getByUserIdAndId(int userId, int id);
 }

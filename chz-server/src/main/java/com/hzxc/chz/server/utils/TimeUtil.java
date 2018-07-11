@@ -1,4 +1,4 @@
-package com.hzxc.chz.server.util;
+package com.hzxc.chz.server.utils;
 
 /**
  * create by chz on 2018/3/5

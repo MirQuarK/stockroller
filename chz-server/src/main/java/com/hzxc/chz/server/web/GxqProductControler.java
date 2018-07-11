@@ -1,7 +1,6 @@
 package com.hzxc.chz.server.web;
 
 import com.hzxc.chz.common.enums.ResultCodeEnum;
-import com.hzxc.chz.dao.GxqProductRepository;
 import com.hzxc.chz.dto.JsonResult;
 import com.hzxc.chz.entity.GxqProduct;
 import com.hzxc.chz.server.annotation.CheckLogin;
@@ -17,9 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class GxqProductControler extends AbstractControler {
@@ -43,13 +40,19 @@ public class GxqProductControler extends AbstractControler {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
         List<GxqProduct> lp = new LinkedList<>();
+        int c = 0;
         try {
+            c = gxqProductService.getCount(userId, sdf.parse(start), sdf.parse(end));
             lp = gxqProductService.getByTimePage(userId, sdf.parse(start), sdf.parse(end), page * count, count);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
-        return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(lp);
+        Map<String, Object> retmap = new HashMap<>();
+        retmap.put("total_count", c);
+        retmap.put("data", lp);
+
+        return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(retmap);
     }
 
     @CheckLogin
@@ -62,5 +65,38 @@ public class GxqProductControler extends AbstractControler {
         GxqProduct gp = gxqProductService.getByUserIdAndId(userId, id);
 
         return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(gp);
+    }
+
+    @CheckLogin(role = "ADMIN")
+    @RequestMapping(value = "addProduct", produces = "application/json")
+    public JsonResult addProduct(@RequestParam int subscribtime,
+                                 @RequestParam int stockid,
+                                 @RequestParam int subscribemoney,
+                                 @RequestParam(required = false, defaultValue = "") String comment,
+                                 @RequestParam(required = false, defaultValue = "0") String productname,
+                                 HttpServletRequest request) {
+
+        GxqProduct gp = new GxqProduct();
+        gp.setCreateUser(getUserId(request));
+        gp.setComment(comment);
+        gp.setStockId(stockid);
+        gp.setSubscribeMoney(subscribemoney);
+        gp.setProductName(productname);
+        gp.setSubscribeTime(subscribtime);
+        gp.setStatus(1);
+        long nowTime = System.currentTimeMillis();
+        gp.setCreateTime(new Date(nowTime));
+
+        boolean ret = gxqProductService.saveProduct(gp);
+
+        return new JsonResult().success().data(ret);
+    }
+
+    @CheckLogin(role = "ADMIN")
+    @RequestMapping(value = "modifyProduct", produces = "application/json")
+    public JsonResult modifyProduct(@RequestParam int userid,
+                                  @RequestParam int productid,
+                                  HttpServletRequest request) {
+        return new JsonResult().success();
     }
 }

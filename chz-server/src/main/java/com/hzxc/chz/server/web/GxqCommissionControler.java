@@ -14,8 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
 import java.text.SimpleDateFormat;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @RestController
 public class GxqCommissionControler extends AbstractControler {
@@ -28,8 +27,8 @@ public class GxqCommissionControler extends AbstractControler {
     GxqCommissionService gxqCommissionService;
 
     @CheckLogin
-    @RequestMapping(value = "getcommpage", produces = "application/json")
-    public JsonResult getBillPage(@RequestParam String start,
+    @RequestMapping(value = "getCommList", produces = "application/json")
+    public JsonResult getCommList(@RequestParam String start,
                                   @RequestParam String end,
                                   @RequestParam int page,
                                   @RequestParam int count,
@@ -37,23 +36,54 @@ public class GxqCommissionControler extends AbstractControler {
         int userId = getUserId(request);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
-        List<GxqCommission> lbill = new LinkedList<>();
+        List<GxqCommission> lc = new LinkedList<>();
+        int c = 0;
         try {
-            lbill = gxqCommissionService.getByTimePage(userId, sdf.parse(start), sdf.parse(end), page * count, count);
+            c = gxqCommissionService.getCount(userId, sdf.parse(start), sdf.parse(end));
+            lc = gxqCommissionService.getByTimePage(userId, sdf.parse(start), sdf.parse(end), page * count, count);
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        return new JsonResult().success().data(lbill);
+        Map<String, Object> retmap = new HashMap<>();
+        retmap.put("total_count", c);
+        retmap.put("data", lc);
+
+
+        return new JsonResult().success().data(retmap);
     }
 
     @CheckLogin
-    @RequestMapping(value = "getcommid", produces = "application/json")
+    @RequestMapping(value = "getCommById", produces = "application/json")
     public JsonResult getBillId(@RequestParam int id,
                                 HttpServletRequest request) {
         int userId = getUserId(request);
-        GxqCommission lxom = gxqCommissionService.getByUserIdAndId(userId, id);
-        return new JsonResult().success().data(lxom);
+        GxqCommission lc = gxqCommissionService.getByUserIdAndId(userId, id);
+        return new JsonResult().success().data(lc);
+    }
+
+    @CheckLogin(role = "ADMIN")
+    @RequestMapping(value = "addComm", produces = "application/json")
+    public JsonResult addComm(@RequestParam int userid,
+                               @RequestParam int totalcomm,
+                               @RequestParam int leftcomm,
+                               @RequestParam(required = false, defaultValue = "") String comment,
+                               HttpServletRequest request) {
+
+        GxqCommission gc = new GxqCommission();
+        gc.setCreateUser(getUserId(request));
+        gc.setUserId(userid);
+        gc.setTotalCommission(totalcomm);
+        gc.setLeftCommission(leftcomm);
+        gc.setComment(comment);
+        gc.setStatus(1);
+        gc.setUserId(userid);
+        long nowTime = System.currentTimeMillis();
+        gc.setCreateTime(new Date(nowTime));
+
+        boolean ret = gxqCommissionService.saveComm(gc);
+
+        return new JsonResult().success().data(ret);
     }
 
     @CheckLogin

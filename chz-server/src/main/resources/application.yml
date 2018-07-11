@@ -108,8 +108,16 @@ custom:
   redis-prefix: ''
 
 sms:
-  url: xxxxxxxxxxxxxx
-  corpId: xxxxxxxxxxxxxx
-  corpPwd: xxxxxxxxxxxxxx
-  corpService: xxxxxxxxxxxxxx
+  url: http://client.cloud.hbsmservice.com:8080/sms_send2.do
+  corpId: gt0326
+  corpPwd: fdf3s2
+  corpService: 1069079438662
   smsCodeTemplate: "您正在进行系统相关操作，验证码：{smsCode}。请不要把验证码泄漏给其他人。如非本人操作，可不用理会。 --呱呱视频 "
+
+wxpay:
+  wxpayappId:
+  wxpaymchId:
+  wxpaymchKey:
+  wxpaysubAppId:
+  wxpaysubMchId:
+  wxpaykeyPath:

@@ -8,4 +8,6 @@ import java.util.List;
 public interface GxqCommissionService {
     List<GxqCommission> getByTimePage(int userId, Date start, Date end, int sindex, int count);
     GxqCommission getByUserIdAndId(int userId, int id);
+    int getCount(int userid, Date start, Date end);
+    boolean saveComm(GxqCommission gc);
 }

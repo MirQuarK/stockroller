@@ -29,7 +29,25 @@ public class GxqOrderServiceImpl implements GxqOrderService {
     }
 
     @Override
+    public int getCount(int userId, Date start, Date end) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String a = sdf.format(start);
+        String b = sdf.format(end);
+        return gxqOrderRepository.getCount(userId, a, b);
+    }
+
+    @Override
     public GxqOrder getByUserIdAndId (int userId, int id) {
         return gxqOrderRepository.getByUserIdAndId(userId, id);
+    }
+
+    @Override
+    public boolean saveOrder(GxqOrder go) {
+        try {
+            gxqOrderRepository.save(go);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
     }
 }

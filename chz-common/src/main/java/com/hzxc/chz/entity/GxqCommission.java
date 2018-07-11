@@ -16,9 +16,14 @@ public class GxqCommission {
     private int userId;
     @Column(columnDefinition="int default 0 ")
     private int createUser;
+
+    @Column(columnDefinition="int default 0 comment '总佣金金额' ")
+    private int totalCommission;
+    @Column(columnDefinition="int default 0 comment '待提佣金' ")
+    private int leftCommission;
     @Column(columnDefinition="int default 0 ")
     private int updateUser;
-//    @Column( columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP comment '创建时间'")
+    //    @Column( columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP comment '创建时间'")
     @Column( columnDefinition="datetime comment '创建时间'")   // 老版本mysql不支持两个时间戳设置,用这个
     private Date createTime;
     @Column( columnDefinition="TIMESTAMP default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP ")
@@ -26,6 +31,22 @@ public class GxqCommission {
     private String Comment;
     @Column(length = 4, columnDefinition="int(4) default 1 comment '状态' ")
     private int status;
+
+    public int getTotalCommission () {
+        return totalCommission;
+    }
+
+    public void setTotalCommission (int totalCommission) {
+        this.totalCommission = totalCommission;
+    }
+
+    public int getLeftCommission () {
+        return leftCommission;
+    }
+
+    public void setLeftCommission (int leftCommission) {
+        this.leftCommission = leftCommission;
+    }
 
     public int getUserId () {
         return userId;

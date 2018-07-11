@@ -34,6 +34,17 @@ public class GxqUser extends BaseEntity {
     @Column(columnDefinition="int default 0 ")
     private int wechatWalletBind;
 
+    @Column(columnDefinition="int(4) default 1 ")
+    private int status;
+
+    public int getStatus () {
+        return status;
+    }
+
+    public void setStatus (int status) {
+        this.status = status;
+    }
+
     public String getPassword () {
         return password;
     }

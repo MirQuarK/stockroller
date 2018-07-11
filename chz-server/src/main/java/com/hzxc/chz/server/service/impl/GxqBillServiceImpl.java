@@ -28,7 +28,26 @@ public class GxqBillServiceImpl implements GxqBillService {
     }
 
     @Override
+    public int getCount (int userId, Date start, Date end) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String a = sdf.format(start);
+        String b = sdf.format(end);
+        return gxqBillRepository.getCount(userId, sdf.format(start), sdf.format(end));
+    }
+
+    @Override
     public GxqBill getByUserIdAndId (int userId, int id) {
         return gxqBillRepository.getByUserIdAndId(userId, id);
+    }
+
+    @Override
+    public boolean saveBill(GxqBill gb) {
+        try {
+            gxqBillRepository.save(gb);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
     }
 }

@@ -18,5 +18,9 @@ public interface GxqBillRepository extends JpaRepository<GxqBill, Long> {
             nativeQuery = true)
     List<GxqBill> getByTimePage(int userId, String start, String end, int si, int c);
 
+    @Query(value = "select count(*) from gxq_bill where user_id = ?1 and create_time BETWEEN ?2 and ?3",
+            nativeQuery = true)
+    int getCount(int userId, String start, String end);
+
     GxqBill getByUserIdAndId(int userId, int id);
 }

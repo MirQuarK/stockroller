@@ -1,4 +1,4 @@
-package com.hzxc.chz.server.util;
+package com.hzxc.chz.server.utils;
 
 import org.im4java.core.ConvertCmd;
 import org.im4java.core.IM4JavaException;

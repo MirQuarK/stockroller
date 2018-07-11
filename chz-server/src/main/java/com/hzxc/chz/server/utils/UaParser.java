@@ -1,4 +1,4 @@
-package com.hzxc.chz.server.util;
+package com.hzxc.chz.server.utils;
 
 import java.util.Arrays;
 

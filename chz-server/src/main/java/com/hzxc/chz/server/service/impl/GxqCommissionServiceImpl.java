@@ -30,4 +30,23 @@ public class GxqCommissionServiceImpl implements GxqCommissionService {
     public GxqCommission getByUserIdAndId (int userId, int id) {
         return gxqCommissionRepository.getByUserIdAndId(userId, id);
     }
+
+    @Override
+    public int getCount(int userid, Date start, Date end) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String a = sdf.format(start);
+        String b = sdf.format(end);
+        return gxqCommissionRepository.getCount(userid, a, b);
+    }
+
+    @Override
+    public boolean saveComm (GxqCommission gc) {
+        try {
+            gxqCommissionRepository.save(gc);
+        } catch (Exception e) {
+            return false;
+        }
+
+        return true;
+    }
 }
