@@ -1,6 +1,6 @@
 # Server settings (ServerProperties)
 server:
-  port: 8400
+  port: 8410
   sessionTimeout: 30
   contextPath: /
 
@@ -12,9 +12,9 @@ server:
     basedir:
     backgroundProcessorDelay: 30 # secs
 
-  ssl:
-    key-store: tomcat.keystore
-    key-store-password: 123456
+#  ssl:
+#    key-store: tomcat.keystore
+#    key-store-password: 123456
 
 spring:
   application:
