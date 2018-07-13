@@ -13,6 +13,7 @@ import io.netty.handler.codec.LengthFieldPrepender;
 import io.netty.handler.codec.http.HttpObjectAggregator;
 import io.netty.handler.codec.http.HttpRequestDecoder;
 import io.netty.handler.codec.http.HttpResponseEncoder;
+import io.netty.handler.codec.string.StringDecoder;
 import io.netty.handler.stream.ChunkedWriteHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,14 +49,6 @@ public class ntsListener {
      * Worker
      */
     EventLoopGroup work = new NioEventLoopGroup();
-    /**
-     * 通道适配器
-     */
-    @Resource
-    private StringRead channelAdapter;
-
-    @Autowired
-    StringDecode stringDecoder;
 
     /**
      * 关闭服务器方法
@@ -63,7 +56,7 @@ public class ntsListener {
     @PreDestroy
     public void close() {
         LOGGER.info("关闭服务器....");
-        //优雅退出
+        //优雅......
         boss.shutdownGracefully();
         work.shutdownGracefully();
     }
@@ -82,19 +75,23 @@ public class ntsListener {
             serverBootstrap.childHandler(new ChannelInitializer<SocketChannel>() {
                 @Override
                 protected void initChannel(SocketChannel ch) throws Exception {
+                    LOGGER.info("new client netty");
                     ChannelPipeline pipeline = ch.pipeline();
 //                    pipeline.addLast(new LengthFieldBasedFrameDecoder(1024*80, 0, 2, 0, 2));
 //                    pipeline.addLast(new LengthFieldPrepender(2));
 //                    pipeline.addLast(stringDecoder);
 //                    pipeline.addLast(new MessageDecoder(), new MessageEncoder(), new NettyServerHandler());
 
-                    pipeline.addLast(new HttpRequestDecoder());
-                    ch.pipeline().addLast( new HttpObjectAggregator(65536));
-                    ch.pipeline().addLast( new HttpResponseEncoder());
-                    ch.pipeline().addLast(new ChunkedWriteHandler());
-                    ch.pipeline().addLast(new HttpServerHandler());
+//                    pipeline.addLast(new HttpRequestDecoder());
+//                    ch.pipeline().addLast( new HttpObjectAggregator(65536));
+//                    ch.pipeline().addLast( new HttpResponseEncoder());
+//                    ch.pipeline().addLast(new ChunkedWriteHandler());
+//                    ch.pipeline().addLast(new HttpServerHandler());
 
-//                    pipeline.addLast(channelAdapter);
+//                    pipeline.addLast(new StringDecode());
+
+                    pipeline.addLast(new StringDecoder());
+                    pipeline.addLast(new MyServerHanlder());
                 }
             });
             LOGGER.info("netty服务器在[{}]端口启动监听", port);
