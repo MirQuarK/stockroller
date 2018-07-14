@@ -67,7 +67,7 @@ public class GxqProductControler extends AbstractControler {
         return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(gp);
     }
 
-    @CheckLogin(role = "ADMIN")
+    @CheckLogin
     @RequestMapping(value = "addProduct", produces = "application/json")
     public JsonResult addProduct(@RequestParam int subscribtime,
                                  @RequestParam int stockid,

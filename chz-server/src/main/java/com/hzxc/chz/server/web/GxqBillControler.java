@@ -60,7 +60,7 @@ public class GxqBillControler extends AbstractControler {
         return new JsonResult().success().data(lbill);
     }
 
-    @CheckLogin(role = "ADMIN")
+    @CheckLogin
     @RequestMapping(value = "modifyBill", produces = "application/json")
     public JsonResult modifyBill(@RequestParam int userid,
                                 @RequestParam int billid,
@@ -68,10 +68,9 @@ public class GxqBillControler extends AbstractControler {
         return new JsonResult().success();
     }
 
-    @CheckLogin(role = "ADMIN")
+    @CheckLogin
     @RequestMapping(value = "addBill", produces = "application/json")
-    public JsonResult addBill(@RequestParam int userid,
-                              @RequestParam int inout,
+    public JsonResult addBill(@RequestParam int inout,
                               @RequestParam int money,
                               @RequestParam int type,
                               @RequestParam(required = false, defaultValue = "") String comment,
@@ -86,7 +85,7 @@ public class GxqBillControler extends AbstractControler {
         gb.setCreateUser(getUserId(request));
         gb.setOrderId(orderid);
         gb.setStatus(1);
-        gb.setUserId(userid);
+        gb.setUserId(getUserId(request));
         long nowTime = System.currentTimeMillis();
         gb.setCreateTime(new Date(nowTime));
 

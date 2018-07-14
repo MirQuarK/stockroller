@@ -62,7 +62,7 @@ public class GxqCommissionControler extends AbstractControler {
         return new JsonResult().success().data(lc);
     }
 
-    @CheckLogin(role = "ADMIN")
+    @CheckLogin
     @RequestMapping(value = "addComm", produces = "application/json")
     public JsonResult addComm(@RequestParam int userid,
                                @RequestParam int totalcomm,

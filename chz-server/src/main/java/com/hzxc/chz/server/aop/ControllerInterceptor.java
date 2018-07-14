@@ -111,5 +111,15 @@ public class ControllerInterceptor {
         return result;
     }
 
+    private Object jump(ProceedingJoinPoint pjp) {
+        Object result = null;
+        try {
+            result = pjp.proceed();
+        } catch (Throwable e) {
+            logger.info("exception: ", e);
+            result = new JsonResult<>().setCode(ResultCodeEnum.SERVER_ERROR).msg(e.getMessage());
+        }
+        return result;
+    }
 
 }

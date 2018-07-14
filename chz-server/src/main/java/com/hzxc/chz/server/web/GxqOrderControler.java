@@ -51,7 +51,7 @@ public class GxqOrderControler extends AbstractControler {
         retmap.put("total_count", c);
         retmap.put("data", lo);
 
-        return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(lo);
+        return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(retmap);
     }
 
     @CheckLogin
@@ -65,10 +65,9 @@ public class GxqOrderControler extends AbstractControler {
         return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(o);
     }
 
-    @CheckLogin(role = "ADMIN")
+    @CheckLogin
     @RequestMapping(value = "addOrder", produces = "application/json")
-    public JsonResult addOrder(@RequestParam int userid,
-                               @RequestParam int gainmoney,
+    public JsonResult addOrder(@RequestParam int gainmoney,
                                @RequestParam int redeemmoney,
                                @RequestParam int stockcount,
                                @RequestParam int stockid,
@@ -87,13 +86,13 @@ public class GxqOrderControler extends AbstractControler {
         go.setStockId(stockid);
         go.setSubscribeMoney(subscribemoney);
         go.setStatus(1);
-        go.setUserId(userid);
+        go.setUserId(getUserId(request));
         long nowTime = System.currentTimeMillis();
         go.setCreateTime(new Date(nowTime));
 
         boolean ret = gxqOrderService.saveOrder(go);
 
-        return new JsonResult().success().data(ret);
+        return new JsonResult().success().data(go.getId());
     }
 
     @CheckLogin(role = "ADMIN")
@@ -101,6 +100,18 @@ public class GxqOrderControler extends AbstractControler {
     public JsonResult modifyOrder(@RequestParam int userid,
                                  @RequestParam int orderid,
                                  HttpServletRequest request) {
+        return new JsonResult().success();
+    }
+
+    @CheckLogin
+    @RequestMapping(value = "delOrder", produces = "application/json")
+    public JsonResult delOrder(@RequestParam int orderid,
+                               HttpServletRequest request) {
+        GxqOrder go = gxqOrderService.getByUserIdAndId(getUserId(request), orderid);
+        if(go != null) {
+            go.setStatus(0);
+            gxqOrderService.saveOrder(go);
+        }
         return new JsonResult().success();
     }
 }

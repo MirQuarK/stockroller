@@ -40,7 +40,7 @@ public class GxqUserControler extends AbstractControler {
     SmsService smsService;
 
     @CheckLogin(role = "ADMIN")
-    @RequestMapping(value = "emp/js/getuserlist", produces = "application/json")
+    @RequestMapping(value = "/getuserlist", produces = "application/json")
     public JsonResult getUserList(@RequestParam int page,
                                   @RequestParam int count,
                                   HttpServletRequest request) {
@@ -54,7 +54,7 @@ public class GxqUserControler extends AbstractControler {
     }
 
     @CheckLogin(role = "ADMIN")
-    @RequestMapping(value = "emp/js/deluser", produces = "application/json")
+    @RequestMapping(value = "/deluser", produces = "application/json")
     public JsonResult delUser(@RequestParam int userid,
                               HttpServletRequest request) {
         GxqUser u = gxqUserRepository.findById(userid);
@@ -64,16 +64,14 @@ public class GxqUserControler extends AbstractControler {
         return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success");
     }
 
-    @CheckLogin()
-    @RequestMapping(value = "user/js/userinfo", produces = "application/json")
+    @CheckLogin
+    @RequestMapping(value = "/userinfo", produces = "application/json")
     public JsonResult getUserInfo(HttpServletRequest request) {
         int userId = getUserId(request);
 
         GxqUser lu = gxqUserRepository.findById(userId);
         return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(lu);
     }
-
-
 
     // 发送手机验证码。
     @RequestMapping(value = "sendsms", produces = "application/json")

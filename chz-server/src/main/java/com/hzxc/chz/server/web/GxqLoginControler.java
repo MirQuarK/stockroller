@@ -77,19 +77,19 @@ public class GxqLoginControler extends AbstractControler {
 
                 boolean newUser = false;
 
-                if(user != null) {
-                    if(sms != null) {
-                        if (!checkMobileCode(mobile, sms)) {
-                            result.setCode(ResultCodeEnum.SERVER_ERROR).msg("验证码错误");
-                            break;
-                        }
-                    } else {
-                        if(pass == null || !pass.equalsIgnoreCase(user.getPassword())) {
-                            result.setCode(ResultCodeEnum.SERVER_ERROR).msg("密码错误");
-                            break;
-                        }
-                    }
-                }
+//                if(user != null) {
+//                    if(sms != null) {
+//                        if (!checkMobileCode(mobile, sms)) {
+//                            result.setCode(ResultCodeEnum.SERVER_ERROR).msg("验证码错误");
+//                            break;
+//                        }
+//                    } else {
+//                        if(pass == null || !pass.equalsIgnoreCase(user.getPassword())) {
+//                            result.setCode(ResultCodeEnum.SERVER_ERROR).msg("密码错误");
+//                            break;
+//                        }
+//                    }
+//                }
 
                 // 用户不存在，有手机验证码可以创建新用户。
                 if (user == null) {

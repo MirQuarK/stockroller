@@ -21,12 +21,12 @@ public class GxqOrder {
     private int gxqProductId;
     @Column(columnDefinition="int default 0 ")
     private int stockId;
-    @Column( columnDefinition="int(11) comment '申购金额'")
+    @Column( columnDefinition="int(11) default 0 comment '申购金额'")
     private int subscribeMoney;
     private int stockCount;
-    @Column( columnDefinition="int(11) comment '赎回金额'")
+    @Column( columnDefinition="int(11) default 0 comment '赎回金额'")
     private int redeemMoney;
-    @Column( columnDefinition="int(11) comment '盈利金额'")
+    @Column( columnDefinition="int(11) default 0 comment '盈利金额'")
     private int gainMoney;
 
     @Column(columnDefinition="int default 0 ")
