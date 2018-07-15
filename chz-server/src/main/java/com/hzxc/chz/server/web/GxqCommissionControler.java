@@ -27,7 +27,7 @@ public class GxqCommissionControler extends AbstractControler {
     GxqCommissionService gxqCommissionService;
 
     @CheckLogin
-    @RequestMapping(value = "getCommList", produces = "application/json")
+    @RequestMapping(value = "getCommByDate", produces = "application/json")
     public JsonResult getCommList(@RequestParam String start,
                                   @RequestParam String end,
                                   @RequestParam int page,
@@ -55,7 +55,7 @@ public class GxqCommissionControler extends AbstractControler {
 
     @CheckLogin
     @RequestMapping(value = "getCommById", produces = "application/json")
-    public JsonResult getBillId(@RequestParam int id,
+    public JsonResult getCommById(@RequestParam int id,
                                 HttpServletRequest request) {
         int userId = getUserId(request);
         GxqCommission lc = gxqCommissionService.getByUserIdAndId(userId, id);
@@ -64,20 +64,18 @@ public class GxqCommissionControler extends AbstractControler {
 
     @CheckLogin
     @RequestMapping(value = "addComm", produces = "application/json")
-    public JsonResult addComm(@RequestParam int userid,
-                               @RequestParam int totalcomm,
+    public JsonResult addComm( @RequestParam int totalcomm,
                                @RequestParam int leftcomm,
                                @RequestParam(required = false, defaultValue = "") String comment,
                                HttpServletRequest request) {
 
         GxqCommission gc = new GxqCommission();
         gc.setCreateUser(getUserId(request));
-        gc.setUserId(userid);
         gc.setTotalCommission(totalcomm);
         gc.setLeftCommission(leftcomm);
         gc.setComment(comment);
         gc.setStatus(1);
-        gc.setUserId(userid);
+        gc.setUserId(getUserId(request));
         long nowTime = System.currentTimeMillis();
         gc.setCreateTime(new Date(nowTime));
 
