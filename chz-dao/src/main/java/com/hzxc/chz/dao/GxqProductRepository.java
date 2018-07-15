@@ -19,4 +19,5 @@ public interface GxqProductRepository extends JpaRepository<GxqProduct, Long> {
     int getCount(int userId, String start, String end);
 
     GxqProduct getByUserIdAndId(int userId, int id);
+    GxqProduct getById(int id);
 }

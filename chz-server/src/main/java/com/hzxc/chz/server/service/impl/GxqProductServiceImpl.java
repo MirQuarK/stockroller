@@ -40,6 +40,11 @@ public class GxqProductServiceImpl implements GxqProductService {
     }
 
     @Override
+    public GxqProduct getById (int id) {
+        return gxqProductRepository.getById(id);
+    }
+
+    @Override
     public boolean saveProduct(GxqProduct gp) {
         try {
             gxqProductRepository.save(gp);

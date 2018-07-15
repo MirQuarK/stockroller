@@ -67,7 +67,7 @@ public class GxqProductControler extends AbstractControler {
         return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success").data(gp);
     }
 
-    @CheckLogin
+    @CheckLogin(role = "ADMIN")
     @RequestMapping(value = "addProduct", produces = "application/json")
     public JsonResult addProduct(@RequestParam int subscribtime,
                                  @RequestParam int stockid,
@@ -94,9 +94,23 @@ public class GxqProductControler extends AbstractControler {
 
     @CheckLogin(role = "ADMIN")
     @RequestMapping(value = "modifyProduct", produces = "application/json")
-    public JsonResult modifyProduct(@RequestParam int userid,
-                                  @RequestParam int productid,
+    public JsonResult modifyProduct(@RequestParam int productid,
+                                  @RequestParam String productname,
+                                  @RequestParam int submoney,
+                                  @RequestParam int rightmoney,
+                                  @RequestParam int subtime,
                                   HttpServletRequest request) {
+        GxqProduct gp = gxqProductService.getById(productid);
+        if(gp == null) {
+            return new JsonResult().setCode(ResultCodeEnum.SERVER_ERROR).msg("id not find");
+        }
+
+        gp.setSubscribeTime(subtime);
+        gp.setProductName(productname);
+        gp.setRightMoney(rightmoney);
+        gp.setSubscribeMoney(submoney);
+        gxqProductService.saveProduct(gp);
+
         return new JsonResult().success();
     }
 }
