@@ -57,4 +57,19 @@ public class RedisConfig extends CachingConfigurerSupport {
         return redisTemplate;
     }
 
+    // 获取session信息需要的redis配置。
+    @Bean()
+    public RedisTemplate redisTemplate1(RedisConnectionFactory factory) {
+
+        // RedisOperationsSessionRepository 里的配置。
+        {
+            RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
+            redisTemplate.setConnectionFactory(factory);
+            JdkSerializationRedisSerializer serializer = new JdkSerializationRedisSerializer();
+            redisTemplate.setDefaultSerializer(serializer);
+            redisTemplate.setKeySerializer(new StringRedisSerializer());
+            redisTemplate.setHashKeySerializer(new StringRedisSerializer());
+            return redisTemplate;
+        }
+    }
 }
