@@ -59,7 +59,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     // 获取session信息需要的redis配置。
     @Bean()
-    public RedisTemplate redisTemplate1(RedisConnectionFactory factory) {
+    public RedisTemplate redisTemplateCookiet(RedisConnectionFactory factory) {
 
         // RedisOperationsSessionRepository 里的配置。
         {

@@ -21,6 +21,11 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class wss {
 
     @Autowired
+    @Qualifier("redisTemplateCookiet")
+    RedisTemplate redisTemplateCookiet;
+
+    @Autowired
+    @Qualifier("redisTemplate")
     RedisTemplate redisTemplate;
 
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
@@ -56,6 +61,9 @@ public class wss {
             }
             return;
         }
+
+        Integer userId = (Integer)redisTemplateCookiet.opsForHash().get(rkey, "sessionAttr:"+Constant.SESSION_USER_ID_KEY);
+        GameUser gameUser = (GameUser)redisTemplate.opsForValue().get("USER_INFO_1");
 
         System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
         try {
