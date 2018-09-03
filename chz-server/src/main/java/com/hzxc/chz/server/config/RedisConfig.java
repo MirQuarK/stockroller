@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.JdkSerializationRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 
@@ -59,7 +60,7 @@ public class RedisConfig extends CachingConfigurerSupport {
 
     // 获取session信息需要的redis配置。
     @Bean()
-    public RedisTemplate redisTemplateCookiet(RedisConnectionFactory factory) {
+    public RedisTemplate redisTemplateCookie (RedisConnectionFactory factory) {
 
         // RedisOperationsSessionRepository 里的配置。
         {

@@ -1,7 +1,9 @@
 package com.hzxc.chz.server.wss;
 
 import com.alibaba.fastjson.JSONObject;
+import com.hzxc.chz.common.Constant;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -21,7 +23,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 public class wss {
 
     @Autowired
-    @Qualifier("redisTemplateCookiet")
+    @Qualifier("redisTemplateCookie")
     RedisTemplate redisTemplateCookiet;
 
     @Autowired
@@ -62,8 +64,8 @@ public class wss {
             return;
         }
 
-        Integer userId = (Integer)redisTemplateCookiet.opsForHash().get(rkey, "sessionAttr:"+Constant.SESSION_USER_ID_KEY);
-        GameUser gameUser = (GameUser)redisTemplate.opsForValue().get("USER_INFO_1");
+        Integer userId = (Integer)redisTemplateCookiet.opsForHash().get(rkey, "sessionAttr:"+ Constant.SESSION_USER_ID_KEY);
+//        GameUser gameUser = (GameUser)redisTemplate.opsForValue().get("USER_INFO_1");
 
         System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
         try {

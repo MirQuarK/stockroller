@@ -5,8 +5,11 @@ import com.hzxc.chz.common.Constant;
 import com.hzxc.chz.common.enums.Enumes;
 import com.hzxc.chz.common.enums.ResultCodeEnum;
 import com.hzxc.chz.dto.JsonResult;
+import com.hzxc.chz.server.annotation.AopTest;
 import com.hzxc.chz.server.annotation.CheckLogin;
+import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
@@ -14,6 +17,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import java.lang.reflect.Method;
@@ -108,6 +112,52 @@ public class ControllerInterceptor {
             long costMs = System.currentTimeMillis() - beginTime;
             logger.info("{}请求结束，耗时：{}ms", methodName, costMs);
         }
+        return result;
+    }
+
+    @AfterReturning(returning="result", pointcut = "execution(* com.hzxc.chz.server.web..*(..)) && @annotation(requestMapping)")
+    public Object RequestMappingPointcut(JoinPoint pjp, Object result, RequestMapping requestMapping) throws Throwable {
+
+        MethodSignature signature = (MethodSignature) pjp.getSignature();
+        Method method = signature.getMethod(); // 获取被拦截的方法
+        String methodName = method.getName(); // 获取被拦截的方法名
+
+        Object[] args = pjp.getArgs();
+        HttpServletRequest request = null;
+        for (Object arg : args) {
+            if (arg instanceof HttpServletRequest) {
+                request = (HttpServletRequest) arg;
+                break;
+            }
+        }
+
+//        if(logger.isDebugEnabled() && request != null){
+            logger.debug("arg: RequestMappingPointcut HttpServletRequest[fucname={},parameters={}]",methodName, JSON.toJSONString(request.getParameterMap()));
+//        }
+
+        return result;
+    }
+
+    @AfterReturning(returning="result", pointcut = "execution(* com.hzxc.chz.server.web..*(..)) && @annotation(aopTest)")
+    public Object AopTestPointcut(JoinPoint pjp, Object result, AopTest aopTest) throws Throwable {
+
+        MethodSignature signature = (MethodSignature) pjp.getSignature();
+        Method method = signature.getMethod(); // 获取被拦截的方法
+        String methodName = method.getName(); // 获取被拦截的方法名
+
+        Object[] args = pjp.getArgs();
+        HttpServletRequest request = null;
+        for (Object arg : args) {
+            if (arg instanceof HttpServletRequest) {
+                request = (HttpServletRequest) arg;
+                break;
+            }
+        }
+
+//        if(logger.isDebugEnabled() && request != null){
+            logger.debug("arg: AopTestPointcut HttpServletRequest[fucname={},parameters={}]",methodName, JSON.toJSONString(request.getParameterMap()));
+//        }
+
         return result;
     }
 
