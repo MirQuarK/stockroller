@@ -14,7 +14,7 @@ public class MyAopInfo {
 
     private Object classInstance = null;
     private Method codeMethod = null;
-    private Parameter[] methodParameters;
+    private Object[] methodParameters;
 
     public Object getClassInstance () {
         return classInstance;
@@ -32,11 +32,11 @@ public class MyAopInfo {
         this.codeMethod = codeMethod;
     }
 
-    public Parameter[] getMethodParameters () {
+    public Object[] getMethodParameters () {
         return methodParameters;
     }
 
-    public void setMethodParameters (Parameter[] methodParameters) {
+    public void setMethodParameters (Object[] methodParameters) {
         this.methodParameters = methodParameters;
     }
 

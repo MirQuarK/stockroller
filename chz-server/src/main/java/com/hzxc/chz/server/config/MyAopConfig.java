@@ -1,5 +1,6 @@
 package com.hzxc.chz.server.config;
 
+import com.hzxc.chz.server.annotation.AopAroundTest;
 import com.hzxc.chz.server.annotation.AopBeforeTest;
 import com.hzxc.chz.server.annotation.AopTest;
 import com.hzxc.chz.server.utils.MyAopInfo;
@@ -25,6 +26,8 @@ public class MyAopConfig {
     public static Map<String, MyAopInfo> aopInfoMap = null;
     // 对应切入注解为anno。
     public static Map<String, MyAopInfo> aopBeforeMap = null;
+    public static Map<String, MyAopInfo> aopAroundMap = null;
+
     @PostConstruct
     public void FindRequestMapping() {
         try {
@@ -37,6 +40,7 @@ public class MyAopConfig {
             // 查找我们自己的注解
             aopInfoMap = new HashMap<>();
             aopBeforeMap = new HashMap<>();
+            aopAroundMap = new HashMap<>();
             if (clazzs.size() > 0) {
                 for (Class<?> cls : clazzs) {
                     Method[] ms = cls.getMethods();
@@ -46,7 +50,8 @@ public class MyAopConfig {
                         if (m.getName().equals("GetSms")) {
                         }
                         if (m.getAnnotation(AopTest.class) != null
-                                || m.getAnnotation(AopBeforeTest.class) != null) {
+                                || m.getAnnotation(AopBeforeTest.class) != null
+                                || m.getAnnotation(AopAroundTest.class) != null) {
                             Constructor constructor = cls.getConstructor();
                             Object codeInstance = constructor.newInstance();
                             needparameters = m.getParameters();
@@ -60,6 +65,9 @@ public class MyAopConfig {
                             }
                             if (m.getAnnotation(AopBeforeTest.class) != null) {
                                 aopBeforeMap.put(m.getName(), info);
+                            }
+                            if (m.getAnnotation(AopAroundTest.class) != null) {
+                                aopAroundMap.put(m.getName(), info);
                             }
                         }
 

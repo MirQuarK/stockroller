@@ -31,13 +31,15 @@ public class MyAopController {
     }
 
     @AopAroundTest
-    public void testAround() {
-        logger.info("in myTest testAround");
+    public void testAround(MyAopInfo myAopInfo) {
+        logger.info("in myTest testAround 111111");
+        myAopInfo.process();
+        logger.info("in myTest testAround 222222");
     }
 
     @AopTest
-    public JsonResult test() {
-        logger.info("in myTest test");
+    public JsonResult test(int i, String s) {
+        logger.info("in myTest test [{}], [{}]", i, s);
         return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success");
     }
 
@@ -58,37 +60,63 @@ public class MyAopController {
     @RequestMapping(value = "myTest", produces = "application/json")
     public JsonResult myTest(HttpServletRequest request) {
 //        test();
-        aopCall("test", null);
+
+        // 模拟调用aop接口
+        Object[] args = new Object[2];
+        args[0] = 1;
+        args[1] = "input aaa";
+        aopCall("test", args);
 
         return new JsonResult().setCode(ResultCodeEnum.SUCCESS).msg("success");
     }
 
-    // 模拟，根据函数名判断调用切入，args先不用。需要时根据args区分重载函数
+    // 模拟，根据函数名判断调用切入，args先不用判断。需要时根据args区分重载函数
     public void aopCall(String name, Object[] args) {
         MyAopInfo myAopInfo = MyAopConfig.aopInfoMap.get(name);
         if(myAopInfo != null) {
             AopProxy aopProxy = new AopProxy();
+            myAopInfo.setMethodParameters(args);
             AopInter aopInter = (AopInter)aopProxy.bind(new AopImpl(), myAopInfo);
 
             for(MyAopInfo mi : MyAopConfig.aopBeforeMap.values()) {
                 aopProxy.setBefore(mi.getCodeMethod());
                 aopProxy.setBeforeT(mi.getClassInstance());
             }
-
+            for(MyAopInfo mi : MyAopConfig.aopAroundMap.values()) {
+                aopProxy.setArround(mi.getCodeMethod());
+                aopProxy.setArroundT(mi.getClassInstance());
+            }
             aopInter.voidf();
+        } else {
+            logger.info("该函数不应从aop调用，请检查bean加载问题");
         }
     }
 
     static class AopProxy implements InvocationHandler {
-        private Object target;
-        private Parameter[] allparameters = null;
-
         private Method before = null;
-
         private Object beforeT;
         private Method after = null;
         private Object afterT;
+
+        private Method arround = null;
+        private Object arroundT;
         private MyAopInfo myAopInfo;
+
+        public Method getArround () {
+            return arround;
+        }
+
+        public void setArround (Method arround) {
+            this.arround = arround;
+        }
+
+        public Object getArroundT () {
+            return arroundT;
+        }
+
+        public void setArroundT (Object arroundT) {
+            this.arroundT = arroundT;
+        }
 
         public Method getBefore () {
             return before;
@@ -107,7 +135,6 @@ public class MyAopController {
         }
 
         public Object bind(Object target, MyAopInfo aopInfo) {
-            this.target = target;
             myAopInfo = aopInfo;
 
             //取得代理对象
@@ -124,7 +151,11 @@ public class MyAopController {
                 before.invoke(beforeT);
             }
 
-            result = myAopInfo.process();
+            if(arround == null) {
+                result = myAopInfo.process();
+            } else {
+                arround.invoke(arroundT, myAopInfo);
+            }
 
             if(after != null) {
                 after.invoke(afterT);
