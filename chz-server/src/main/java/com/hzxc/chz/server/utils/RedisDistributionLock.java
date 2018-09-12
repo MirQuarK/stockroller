@@ -1,5 +1,6 @@
 package com.hzxc.chz.server.utils;
 
+import com.hzxc.chz.common.Constant;
 import com.hzxc.chz.service.DistributionLock;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class RedisDistributionLock implements DistributionLock {
      */
     @Override
     public boolean tryLock(String lockKey, int expireLock) {
-        String lockPk = LOCK_PREFIX.concat(lockKey);
+        String lockPk = Constant.REDIS_KEY_PREFIX + LOCK_PREFIX.concat(lockKey);
         if (redisTemplate.hasKey(lockPk)) {
             return false;
         }
@@ -79,10 +80,11 @@ public class RedisDistributionLock implements DistributionLock {
     /**
      * 解锁
      *
-     * @param lockKey
+     * @param lockKeyO
      */
     @Override
-    public void unLock(String lockKey) {
+    public void unLock(String lockKeyO) {
+        String lockKey = Constant.REDIS_KEY_PREFIX + lockKeyO;
         String lockPk = LOCK_PREFIX.concat(lockKey);
         redisTemplate.delete(lockPk);
     }

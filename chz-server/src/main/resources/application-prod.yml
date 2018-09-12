@@ -34,3 +34,6 @@ pay:
   wxpay:
     keyStoreFilePath: /app/chz/apiclient_cert.p12
     serverIp: 192.168.0.1
+
+utils:
+  redis-prefix: 'GROUP_ACTIVITY_'

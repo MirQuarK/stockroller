@@ -15,10 +15,13 @@ import com.hzxc.chz.util.HttpHelper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
@@ -35,11 +38,19 @@ public class GxqLoginControler extends AbstractControler {
     @Autowired
     GxqCurrencyRepository gxqCurrencyRepository;
 
+    @Value(value = "${utils.redis-prefix}")
+    private String redisPrefix;
+
     @Autowired
     GxqRecordService gxqRecordService;
 
     @Autowired
     RedisTemplate redisTemplate;
+
+    @PostConstruct
+    private void redisPrefixConfig() {
+        Constant.REDIS_KEY_PREFIX = redisPrefix;
+    }
 
     // 验证码登陆的,如果不存在,创建新用户.密码登陆的,不创建新用户.
     @RequestMapping(value = "login", produces = "application/json")
