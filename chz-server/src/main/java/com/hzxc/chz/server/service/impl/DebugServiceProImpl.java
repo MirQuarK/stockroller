@@ -11,11 +11,11 @@ import org.springframework.stereotype.Service;
 public class DebugServiceProImpl implements DebugService {
     @Override
     public void debug(Logger logger, String var1, Object... var2) {
-//        logger.debug(var1, var2);
+        logger.info(var1, var2);
     }
 
     @Override
     public void debug(Logger logger, String var1) {
-//        logger.debug(var1);
+        logger.info(var1);
     }
 }
