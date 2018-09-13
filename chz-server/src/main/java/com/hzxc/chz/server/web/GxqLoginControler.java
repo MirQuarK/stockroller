@@ -47,6 +47,9 @@ public class GxqLoginControler extends AbstractControler {
     @Autowired
     RedisTemplate redisTemplate;
 
+    @Autowired
+    DebugService debugService;
+
     @PostConstruct
     private void redisPrefixConfig() {
         Constant.REDIS_KEY_PREFIX = redisPrefix;
@@ -59,6 +62,7 @@ public class GxqLoginControler extends AbstractControler {
                                              @RequestParam(required = false) String sms,
                                              HttpServletRequest request) {
         logger.info("login forward,mobile:[{}], pass:[{}], sms[{}]", pass, sms);
+        debugService.debug(logger, "test");
 
         long nowTime = System.currentTimeMillis();
         JsonResult<LoginResponse> result = new JsonResult<>();
