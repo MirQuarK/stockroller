@@ -6,4 +6,4 @@ SERVER_HOME=`echo $FINDNAME | sed -e 's@/[^/]*$@@'`
 unset FINDNAME
 
 cd $SERVER_HOME
-./serverctrl.sh start -Module ${project.artifactId}-${project.version} -Env test
+./serverctrl.sh start -Module ${project.artifactId}-${project.version} -Env local

@@ -39,4 +39,4 @@ pay:
     serverIp: 192.168.0.1
 
 utils:
-  redis-prefix: 'GROUP_ACTIVITY_'
+  redis-prefix: 'STOCKROLLER_'

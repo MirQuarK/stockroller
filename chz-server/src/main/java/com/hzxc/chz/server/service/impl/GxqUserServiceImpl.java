@@ -30,24 +30,24 @@ public class GxqUserServiceImpl implements GxqUserService {
     DistributionLock distributionLock;
 
     @Override
-    @Cacheable(key = "'USER_INFO_'+#id", value = "USER_INFO_DATA")
-    public GxqUser getUserById(int id) {
+    @Cacheable(key = "#prefix + 'USER_INFO_'+#id", value = "USER_INFO_DATA")
+    public GxqUser getUserById(String prefix, int id) {
         return userRepository.findById(id);
     }
 
     @Override
-    @Cacheable(key = "'USER_INFO_'+#mobile", value = "USER_INFO_DATA")
-    public GxqUser getUserByMobile(String mobile) {
+    @Cacheable(key = "#prefix + 'USER_INFO_'+#mobile", value = "USER_INFO_DATA")
+    public GxqUser getUserByMobile(String prefix, String mobile) {
         return userRepository.findByMobile(mobile);
     }
 
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(key = "'USER_INFO_'+#user.id", value = "USER_INFO_DATA"),
-                    @CacheEvict(key = "'USER_INFO_'+#user.mobile", value = "USER_INFO_DATA")
+                    @CacheEvict(key = "#prefix + 'USER_INFO_'+#user.id", value = "USER_INFO_DATA"),
+                    @CacheEvict(key = "#prefix + 'USER_INFO_'+#user.mobile", value = "USER_INFO_DATA")
             })
-    public void saveUser(GxqUser user) {
+    public void saveUser(String prefix, GxqUser user) {
         boolean isNew = false;
         if (user.getId() == 0) {
             isNew = true;
@@ -66,10 +66,10 @@ public class GxqUserServiceImpl implements GxqUserService {
     @Override
     @Caching(
             evict = {
-                    @CacheEvict(key = "'USER_INFO_'+#user.id", value = "USER_INFO_DATA", condition = "#uesr.id!=null"),
-                    @CacheEvict(key = "'USER_INFO_'+#user.mobile", value = "USER_INFO_DATA", condition = "#user.unionId!=null")
+                    @CacheEvict(key = "#prefix + 'USER_INFO_'+#user.id", value = "USER_INFO_DATA", condition = "#uesr.id!=null"),
+                    @CacheEvict(key = "#prefix + 'USER_INFO_'+#user.mobile", value = "USER_INFO_DATA", condition = "#user.unionId!=null")
             })
-    public void flushUser(GxqUser userId) {
+    public void flushUser(String prefix, GxqUser userId) {
 
     }
 

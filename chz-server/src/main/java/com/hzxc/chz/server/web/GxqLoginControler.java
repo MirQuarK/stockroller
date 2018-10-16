@@ -67,7 +67,7 @@ public class GxqLoginControler extends AbstractControler {
         long nowTime = System.currentTimeMillis();
         JsonResult<LoginResponse> result = new JsonResult<>();
 
-        GxqUser user1 = gxqUserService.getUserByMobile(mobile);
+        GxqUser user1 = gxqUserService.getUserByMobile(Constant.REDIS_KEY_PREFIX, mobile);
 
         if (request.getSession().getAttribute(Constant.SESSION_USER_ID_KEY) != null) {
             result.setCode(ResultCodeEnum.SERVER_ERROR).msg("已登陆");
@@ -88,7 +88,7 @@ public class GxqLoginControler extends AbstractControler {
         try {
             do {
                 result.setCode(ResultCodeEnum.SUCCESS);
-                GxqUser user = gxqUserService.getUserByMobile(mobile);
+                GxqUser user = gxqUserService.getUserByMobile(Constant.REDIS_KEY_PREFIX, mobile);
 
                 boolean newUser = false;
 
@@ -123,7 +123,7 @@ public class GxqLoginControler extends AbstractControler {
 
                 user.setLastLoginTime(new Date(nowTime));
 
-                gxqUserService.saveUser(user);//saveOrUpdate
+                gxqUserService.saveUser(Constant.REDIS_KEY_PREFIX, user);//saveOrUpdate
 
                 resp.setUserId(user.getId());
                 resp.setNewUser(newUser);
@@ -179,7 +179,7 @@ public class GxqLoginControler extends AbstractControler {
             int userId = getUserId(request);
             request.getSession().invalidate();
 
-            GxqUser user = gxqUserService.getUserById(userId);
+            GxqUser user = gxqUserService.getUserById(Constant.REDIS_KEY_PREFIX, userId);
             if(user != null) {
                 logger.debug("user logout success,username=[{}]", user.getMobile());
             }
@@ -203,10 +203,10 @@ public class GxqLoginControler extends AbstractControler {
                                              HttpServletRequest request) {
         JsonResult result = new JsonResult<>().success();
         String mobile = getUserMobile(request);
-        GxqUser user = gxqUserService.getUserByMobile(mobile);
+        GxqUser user = gxqUserService.getUserByMobile(Constant.REDIS_KEY_PREFIX, mobile);
         if(user != null && checkMobileCode(mobile, sms)) {
             user.setPassword(pass);
-            gxqUserService.saveUser(user);
+            gxqUserService.saveUser(Constant.REDIS_KEY_PREFIX, user);
 
             // todo 记录修改密码日志。
         }
